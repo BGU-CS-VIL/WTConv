@@ -1,0 +1,44 @@
+Validating in float32. AMP not enabled.
+WARNING: No pretrained configuration specified for wtconvnext_small model. Using a default. Please add a config to the model pretrained_cfg registry or pass explicitly.
+Loaded  from checkpoint './WTConvNeXt_small_5_300e_ema.pth'
+Model wtconvnext_small created, param count: 54448936
+Data processing configuration for current model + dataset:
+	input_size: (3, 224, 224)
+	interpolation: bicubic
+	mean: (0.485, 0.456, 0.406)
+	std: (0.229, 0.224, 0.225)
+	crop_pct: 0.875
+	crop_mode: center
+Test: [   0/196]  Time: 2.622s (2.622s,   97.62/s)  Loss:  0.3905 (0.3905)  Acc@1:  92.188 ( 92.188)  Acc@5:  98.438 ( 98.438)
+Test: [  10/196]  Time: 0.493s (0.747s,  342.81/s)  Loss:  0.8131 (0.5067)  Acc@1:  80.078 ( 87.607)  Acc@5:  97.266 ( 98.438)
+Test: [  20/196]  Time: 0.493s (0.627s,  408.58/s)  Loss:  0.4130 (0.5130)  Acc@1:  93.359 ( 88.021)  Acc@5:  97.656 ( 98.233)
+Test: [  30/196]  Time: 0.497s (0.584s,  438.01/s)  Loss:  0.6366 (0.4783)  Acc@1:  87.109 ( 89.100)  Acc@5:  97.266 ( 98.299)
+Test: [  40/196]  Time: 0.500s (0.564s,  454.21/s)  Loss:  0.4372 (0.5207)  Acc@1:  89.844 ( 88.043)  Acc@5:  98.047 ( 98.028)
+Test: [  50/196]  Time: 0.502s (0.551s,  464.38/s)  Loss:  0.3717 (0.5248)  Acc@1:  92.578 ( 87.829)  Acc@5:  97.266 ( 97.970)
+Test: [  60/196]  Time: 0.502s (0.543s,  471.36/s)  Loss:  0.6505 (0.5423)  Acc@1:  84.766 ( 87.436)  Acc@5:  96.875 ( 97.970)
+Test: [  70/196]  Time: 0.505s (0.537s,  476.33/s)  Loss:  0.5910 (0.5295)  Acc@1:  85.938 ( 87.654)  Acc@5:  98.438 ( 98.052)
+Test: [  80/196]  Time: 0.506s (0.533s,  479.93/s)  Loss:  0.8999 (0.5447)  Acc@1:  75.391 ( 87.264)  Acc@5:  95.703 ( 97.907)
+Test: [  90/196]  Time: 0.506s (0.530s,  482.65/s)  Loss:  1.3443 (0.5718)  Acc@1:  65.625 ( 86.487)  Acc@5:  94.141 ( 97.643)
+Test: [ 100/196]  Time: 0.505s (0.528s,  484.80/s)  Loss:  0.7180 (0.6030)  Acc@1:  81.250 ( 85.651)  Acc@5:  98.047 ( 97.409)
+Test: [ 110/196]  Time: 0.506s (0.526s,  486.53/s)  Loss:  0.5774 (0.6132)  Acc@1:  85.938 ( 85.367)  Acc@5:  98.047 ( 97.322)
+Test: [ 120/196]  Time: 0.509s (0.525s,  487.87/s)  Loss:  0.8689 (0.6173)  Acc@1:  78.125 ( 85.324)  Acc@5:  92.578 ( 97.185)
+Test: [ 130/196]  Time: 0.509s (0.524s,  489.00/s)  Loss:  0.3725 (0.6359)  Acc@1:  89.844 ( 84.709)  Acc@5:  98.828 ( 97.054)
+Test: [ 140/196]  Time: 0.508s (0.523s,  489.94/s)  Loss:  0.5468 (0.6413)  Acc@1:  87.109 ( 84.555)  Acc@5:  98.047 ( 97.002)
+Test: [ 150/196]  Time: 0.755s (0.526s,  487.15/s)  Loss:  0.6987 (0.6505)  Acc@1:  86.328 ( 84.341)  Acc@5:  94.531 ( 96.885)
+Test: [ 160/196]  Time: 0.509s (0.531s,  482.00/s)  Loss:  0.3805 (0.6570)  Acc@1:  91.016 ( 84.171)  Acc@5:  98.047 ( 96.824)
+Test: [ 170/196]  Time: 0.510s (0.530s,  483.12/s)  Loss:  0.3322 (0.6671)  Acc@1:  93.359 ( 83.886)  Acc@5:  98.828 ( 96.722)
+Test: [ 180/196]  Time: 0.511s (0.529s,  484.10/s)  Loss:  0.9359 (0.6760)  Acc@1:  76.172 ( 83.615)  Acc@5:  96.875 ( 96.692)
+Test: [ 190/196]  Time: 0.509s (0.528s,  485.00/s)  Loss:  1.0076 (0.6771)  Acc@1:  72.266 ( 83.565)  Acc@5:  97.266 ( 96.701)
+ * Acc@1 83.626 (16.374) Acc@5 96.726 (3.274)
+--result
+{
+    "model": "wtconvnext_small",
+    "top1": 83.626,
+    "top1_err": 16.374,
+    "top5": 96.726,
+    "top5_err": 3.274,
+    "param_count": 54.45,
+    "img_size": 224,
+    "crop_pct": 0.875,
+    "interpolation": "bicubic"
+}
