@@ -6,7 +6,7 @@ from .util import wavelet
 
 
 class WTConv2d(nn.Module):
-    def __init__(self, in_channels, out_channels, kernel_size=5, stride=1, padding=2, bias=True, wt_levels=1, wt_type='db1'):
+    def __init__(self, in_channels, out_channels, kernel_size=5, stride=1, bias=True, wt_levels=1, wt_type='db1'):
         super(WTConv2d, self).__init__()
 
         assert in_channels == out_channels
@@ -23,11 +23,11 @@ class WTConv2d(nn.Module):
         self.wt_function = wavelet.wavelet_transform_init(self.wt_filter)
         self.iwt_function = wavelet.inverse_wavelet_transform_init(self.iwt_filter)
 
-        self.base_conv = nn.Conv2d(in_channels, in_channels, kernel_size, padding=padding, stride=1, dilation=1, groups=in_channels, bias=bias)
+        self.base_conv = nn.Conv2d(in_channels, in_channels, kernel_size, padding='same', stride=1, dilation=1, groups=in_channels, bias=bias)
         self.base_scale = _ScaleModule([1,in_channels,1,1])
 
         self.wavelet_convs = nn.ModuleList(
-            [nn.Conv2d(in_channels*4, in_channels*4, kernel_size, padding=padding, stride=1, dilation=1, groups=in_channels*4, bias=False) for _ in range(self.wt_levels)]
+            [nn.Conv2d(in_channels*4, in_channels*4, kernel_size, padding='same', stride=1, dilation=1, groups=in_channels*4, bias=False) for _ in range(self.wt_levels)]
         )
         self.wavelet_scale = nn.ModuleList(
             [_ScaleModule([1,in_channels*4,1,1], init_scale=0.1) for _ in range(self.wt_levels)]
@@ -80,13 +80,13 @@ class WTConv2d(nn.Module):
             next_x_ll = next_x_ll[:, :, :curr_shape[2], :curr_shape[3]]
 
         x_tag = next_x_ll
-        assert len(x_ll_in_levels) == 0    
-        
-        if self.do_stride is not None:
-            x_tag = self.do_stride(x_tag)
+        assert len(x_ll_in_levels) == 0
         
         x = self.base_scale(self.base_conv(x))
         x = x + x_tag
+        
+        if self.do_stride is not None:
+            x = self.do_stride(x)
 
         return x
 

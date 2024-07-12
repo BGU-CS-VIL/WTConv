@@ -105,7 +105,6 @@ class WTConvNeXtBlock(nn.Module):
             out_chs,
             kernel_size=kernel_size,
             stride=stride,
-            padding=((kernel_size-1)//2),
             bias=conv_bias,
             wt_levels=wt_levels,
         )

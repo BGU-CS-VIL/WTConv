@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """ ImageNet Validation Script
 
+Taken from timm version 1.0.7
+https://github.com/huggingface/pytorch-image-models/blob/v1.0.7/validate.py
+
 This is intended to be a lean and easily modifiable ImageNet validation script for evaluating pretrained
 models or training checkpoints against ImageNet or similarly organized image datasets. It prioritizes
 canonical PyTorch, standard Python style, and good performance. Repurpose as you see fit.
