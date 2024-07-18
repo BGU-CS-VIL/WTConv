@@ -28,15 +28,23 @@ class="center">
 You can import WTConv and use it in your CNN
 ```python
 from wtconv import WTConv2d
+
+conv_dw = WTConv(32, 32, kernel_size=5, wt_levels=3)
 ```
 Or you can use WTConvNeXt through timm's model registry
 ```python
 import wtconvnext
+
+model = create_model(
+    "wtconvnext_tiny",
+    pretrained=False,
+    num_classes=1000
+)
 ```
 
 
 ## Results and Trained Models
-
+### ImageNet-1K
 | name | resolution |acc@1 | #params | FLOPs | model |
 |:---:|:---:|:---:|:---:| :---:|:---:|
 | WTConvNeXt-T | 224x224 | 82.5 | 30M | 4.5G | [model](https://drive.google.com/file/d/1wMgUUJBAs4Fz2dZoNS7QCk9kMB8MPMtC/view?usp=drive_link) |
@@ -159,7 +167,7 @@ This project is released under the MIT license. Please see the [LICENSE](LICENSE
 ## Citation
 If you find this repository helpful, please consider citing:
 ```
-@inproceedings{finders2024wavelet,
+@inproceedings{finder2024wavelet,
   title     = {Wavelet Convolutions for Large Receptive Fields},
   author    = {Finder, Shahaf E and Amoyal, Roy and Treister, Eran and Freifeld, Oren},
   booktitle = {European Conference on Computer Vision},
