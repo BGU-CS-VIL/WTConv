@@ -1,8 +1,6 @@
 import pywt
 import pywt.data
 import torch
-from torch import nn
-from torch.autograd import Function
 import torch.nn.functional as F
 
 
@@ -42,37 +40,3 @@ def inverse_wavelet_transform(x, filters):
     x = x.reshape(b, c * 4, h_half, w_half)
     x = F.conv_transpose2d(x, filters, stride=2, groups=c, padding=pad)
     return x
-
-
-def wavelet_transform_init(filters):
-    class WaveletTransform(Function):
-
-        @staticmethod
-        def forward(ctx, input):
-            with torch.no_grad():
-                x = wavelet_transform(input, filters)
-            return x
-
-        @staticmethod
-        def backward(ctx, grad_output):
-            grad = inverse_wavelet_transform(grad_output, filters)
-            return grad, None
-
-    return WaveletTransform().apply
-
-
-def inverse_wavelet_transform_init(filters):
-    class InverseWaveletTransform(Function):
-
-        @staticmethod
-        def forward(ctx, input):
-            with torch.no_grad():
-                x = inverse_wavelet_transform(input, filters)
-            return x
-
-        @staticmethod
-        def backward(ctx, grad_output):
-            grad = wavelet_transform(grad_output, filters)
-            return grad, None
-
-    return InverseWaveletTransform().apply

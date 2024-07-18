@@ -362,6 +362,10 @@ class WTConvNeXt(nn.Module):
         named_apply(partial(_init_weights, head_init_scale=head_init_scale), self)
 
     @torch.jit.ignore
+    def no_weight_decay(self):
+        {k for k,_ in self.named_parameters() if 'wavelet_scale' in k or 'base_scale' in k}
+
+    @torch.jit.ignore
     def group_matcher(self, coarse=False):
         return dict(
             stem=r'^stem',

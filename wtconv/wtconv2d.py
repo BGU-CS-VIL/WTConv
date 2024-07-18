@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from functools import partial
+
 from .util import wavelet
 
 
@@ -19,9 +21,9 @@ class WTConv2d(nn.Module):
         self.wt_filter, self.iwt_filter = wavelet.create_wavelet_filter(wt_type, in_channels, in_channels, torch.float)
         self.wt_filter = nn.Parameter(self.wt_filter, requires_grad=False)
         self.iwt_filter = nn.Parameter(self.iwt_filter, requires_grad=False)
-        
-        self.wt_function = wavelet.wavelet_transform_init(self.wt_filter)
-        self.iwt_function = wavelet.inverse_wavelet_transform_init(self.iwt_filter)
+
+        self.wt_function = partial(wavelet.wavelet_transform, filters = self.wt_filter)
+        self.iwt_function = partial(wavelet.inverse_wavelet_transform, filters = self.iwt_filter)
 
         self.base_conv = nn.Conv2d(in_channels, in_channels, kernel_size, padding='same', stride=1, dilation=1, groups=in_channels, bias=bias)
         self.base_scale = _ScaleModule([1,in_channels,1,1])
