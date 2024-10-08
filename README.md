@@ -56,7 +56,7 @@ model = create_model(
 You can use this script, taken from the timm library, to train WTConvNeXt-T:
 
 ```sh
-python train.py --model convnext_tiny --drop-path 0.1 \
+python train.py --model wtconvnext_tiny --drop-path 0.1 \
                 --data-dir IMAGENET_PATH \
                 --epochs 300 --warmup-epochs 20 \
                 --batch-size 64 --grad-accum-steps 64 --sched-on-updates \
@@ -72,7 +72,7 @@ E.q., we've trained the network using a single machine with 4 GPUs, hence set ba
 
 ```sh
 torchrun --nproc-per-node=4  \
-         python train.py --model convnext_tiny --drop-path 0.1 \
+         python train.py --model wtconvnext_tiny --drop-path 0.1 \
                 --data-dir IMAGENET_PATH \
                 --epochs 300 --warmup-epochs 20 \
                 --batch-size 64 --grad-accum-steps 16 --sched-on-updates \
@@ -90,7 +90,7 @@ Other network sizes:
 Single GPU
 
 ```
-python train.py --model convnext_small --drop-path 0.4 \
+python train.py --model wtconvnext_small --drop-path 0.4 \
                 --data-dir IMAGENET_PATH \
                 --epochs 300 --warmup-epochs 20 \
                 --batch-size 64 --grad-accum-steps 64 --sched-on-updates \
@@ -104,7 +104,7 @@ python train.py --model convnext_small --drop-path 0.4 \
 Multi-GPU
 ```
 torchrun --nproc-per-node=4  \
-         python train.py --model convnext_small --drop-path 0.1 \
+         python train.py --model wtconvnext_small --drop-path 0.1 \
                 --data-dir IMAGENET_PATH \
                 --epochs 300 --warmup-epochs 20 \
                 --batch-size 64 --grad-accum-steps 16 --sched-on-updates \
@@ -122,7 +122,7 @@ torchrun --nproc-per-node=4  \
 Single GPU
 
 ```
-python train.py --model convnext_base --drop-path 0.4 \
+python train.py --model wtconvnext_base --drop-path 0.4 \
                 --data-dir IMAGENET_PATH \
                 --epochs 300 --warmup-epochs 20 \
                 --batch-size 64 --grad-accum-steps 64 --sched-on-updates \
@@ -137,7 +137,7 @@ Multi-GPU
 
 ```
 torchrun --nproc-per-node=4  \
-         python train.py --model convnext_base --drop-path 0.5 \
+         python train.py --model wtconvnext_base --drop-path 0.5 \
                 --data-dir IMAGENET_PATH \
                 --epochs 300 --warmup-epochs 20 \
                 --batch-size 64 --grad-accum-steps 16 --sched-on-updates \
