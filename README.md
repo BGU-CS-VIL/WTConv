@@ -150,7 +150,8 @@ torchrun --nproc-per-node=4  \
                 --opt adamw --layer-decay 1.0 \
                 --aa rand-m9-mstd0.5-inc1 \
                 --reprob 0.25 --mixup 0.8 --cutmix 1.0 \
-                --output checkpoints/wtconvnext_tiny_120/
+                --model-ema --model-ema-decay 0.9999 \
+                --output checkpoints/wtconvnext_tiny_300/
 ```
 
 </details>
