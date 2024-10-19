@@ -64,7 +64,8 @@ python train.py --model wtconvnext_tiny --drop-path 0.1 \
                 --opt adamw --layer-decay 1.0 \
                 --aa rand-m9-mstd0.5-inc1 \
                 --reprob 0.25 --mixup 0.8 --cutmix 1.0 \
-                --output checkpoints/wtconvnext_tiny_120/
+                --model-ema --model-ema-decay 0.9999 \
+                --output checkpoints/wtconvnext_tiny_300/
 ```
 
 You can use `torchrun` to distribute the training, just note that the effective batch size should be 4096 (gpus * batch-size * grad-accum-steps = 4096).  
@@ -80,7 +81,8 @@ torchrun --nproc-per-node=4  \
                 --opt adamw --layer-decay 1.0 \
                 --aa rand-m9-mstd0.5-inc1 \
                 --reprob 0.25 --mixup 0.8 --cutmix 1.0 \
-                --output checkpoints/wtconvnext_tiny_120/
+                --model-ema --model-ema-decay 0.9999 \
+                --output checkpoints/wtconvnext_tiny_300/
 ```
 
 Other network sizes:
@@ -98,7 +100,8 @@ python train.py --model wtconvnext_small --drop-path 0.4 \
                 --opt adamw --layer-decay 1.0 \
                 --aa rand-m9-mstd0.5-inc1 \
                 --reprob 0.25 --mixup 0.8 --cutmix 1.0 \
-                --output checkpoints/wtconvnext_tiny_120/
+                --model-ema --model-ema-decay 0.9999 \
+                --output checkpoints/wtconvnext_tiny_300/
 ```
 
 Multi-GPU
@@ -112,7 +115,8 @@ torchrun --nproc-per-node=4  \
                 --opt adamw --layer-decay 1.0 \
                 --aa rand-m9-mstd0.5-inc1 \
                 --reprob 0.25 --mixup 0.8 --cutmix 1.0 \
-                --output checkpoints/wtconvnext_tiny_120/
+                --model-ema --model-ema-decay 0.9999 \
+                --output checkpoints/wtconvnext_tiny_300/
 ```
 
 </details>
@@ -130,7 +134,8 @@ python train.py --model wtconvnext_base --drop-path 0.4 \
                 --opt adamw --layer-decay 1.0 \
                 --aa rand-m9-mstd0.5-inc1 \
                 --reprob 0.25 --mixup 0.8 --cutmix 1.0 \
-                --output checkpoints/wtconvnext_tiny_120/
+                --model-ema --model-ema-decay 0.9999 \
+                --output checkpoints/wtconvnext_tiny_300/
 ```
 
 Multi-GPU
