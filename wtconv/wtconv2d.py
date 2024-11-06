@@ -33,8 +33,7 @@ class WTConv2d(nn.Module):
         )
 
         if self.stride > 1:
-            self.stride_filter = nn.Parameter(torch.ones(in_channels, 1, 1, 1), requires_grad=False)
-            self.do_stride = lambda x_in: F.conv2d(x_in, self.stride_filter, bias=None, stride=self.stride, groups=in_channels)
+            self.do_stride = nn.AvgPool2d(kernel_size=1, stride=stride)
         else:
             self.do_stride = None
 
