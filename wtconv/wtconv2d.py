@@ -22,9 +22,6 @@ class WTConv2d(nn.Module):
         self.wt_filter = nn.Parameter(self.wt_filter, requires_grad=False)
         self.iwt_filter = nn.Parameter(self.iwt_filter, requires_grad=False)
 
-        self.wt_function = partial(wavelet.wavelet_transform, filters = self.wt_filter)
-        self.iwt_function = partial(wavelet.inverse_wavelet_transform, filters = self.iwt_filter)
-
         self.base_conv = nn.Conv2d(in_channels, in_channels, kernel_size, padding='same', stride=1, dilation=1, groups=in_channels, bias=bias)
         self.base_scale = _ScaleModule([1,in_channels,1,1])
 
@@ -56,7 +53,7 @@ class WTConv2d(nn.Module):
                 curr_pads = (0, curr_shape[3] % 2, 0, curr_shape[2] % 2)
                 curr_x_ll = F.pad(curr_x_ll, curr_pads)
 
-            curr_x = self.wt_function(curr_x_ll)
+            curr_x = wavelet.wavelet_transform(curr_x_ll, self.wt_filter)
             curr_x_ll = curr_x[:,:,0,:,:]
             
             shape_x = curr_x.shape
@@ -77,7 +74,7 @@ class WTConv2d(nn.Module):
             curr_x_ll = curr_x_ll + next_x_ll
 
             curr_x = torch.cat([curr_x_ll.unsqueeze(2), curr_x_h], dim=2)
-            next_x_ll = self.iwt_function(curr_x)
+            next_x_ll = wavelet.inverse_wavelet_transform(curr_x, self.iwt_filter)
 
             next_x_ll = next_x_ll[:, :, :curr_shape[2], :curr_shape[3]]
 
