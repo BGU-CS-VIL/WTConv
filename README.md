@@ -29,7 +29,7 @@ You can import WTConv and use it in your CNN
 ```python
 from wtconv import WTConv2d
 
-conv_dw = WTConv(32, 32, kernel_size=5, wt_levels=3)
+conv_dw = WTConv2d(32, 32, kernel_size=5, wt_levels=3)
 ```
 Or you can use WTConvNeXt through timm's model registry
 ```python
