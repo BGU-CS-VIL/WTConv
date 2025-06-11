@@ -19,12 +19,15 @@ class="center">
 </p>
 </details>
 
-### Requirements
+## Updates
+* June 11, 2025 - Added WTConv1d, as implemented for [TimePoint](https://github.com/BGU-CS-VIL/TimePoint).
+
+## Requirements
 - Python 3.12
 - timm 1.0.7
 - PyWavelets 1.6.0
 
-### How to use
+## How to use
 You can import WTConv and use it in your CNN
 ```python
 from wtconv import WTConv2d
