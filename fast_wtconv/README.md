@@ -32,7 +32,7 @@ Ensure you have the necessary dependencies installed:
 - Triton (for the Triton backend)
 
 > [!NOTE]
-> The CUDA backend uses JIT (Just-In-Time) compilation. You must have `nvcc` (NVIDIA CUDA Compiler) installed and available in your system PATH for it to work.
+> All implementations use JIT (Just-In-Time) compilation. For the CUDA backend, you must have `nvcc` (NVIDIA CUDA Compiler) installed and available in your system PATH for it to work.
 
 ## Usage
 
