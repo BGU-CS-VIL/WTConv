@@ -9,9 +9,9 @@ A high-performance implementation of Wavelet Convolution (WTConv) layers with op
 ## Features
 
 - **Multi-Backend Support**:
-  - **CUDA**: Optimized CUDA kernels for NVIDIA GPUs.
-  - **Metal (MPS)**: Optimized Metal shaders for Apple Silicon (M1/M2/M3).
-  - **Triton**: Pure Triton implementation for portability and high performance without CUDA dependencies.
+  - **CUDA**: Optimized CUDA kernels for NVIDIA GPUs. Supports fp32, fp16, and bf16.
+  - **Metal (MPS)**: Optimized Metal shaders for Apple Silicon (M1/M2/M3). Supports fp32 and fp16.
+  - **Triton**: Pure Triton implementation for portability and high performance without CUDA dependencies. Supports fp32, fp16, and bf16.
 - **Seamless Integration**: Matches the API of the original `WTConv2d` for easy integration into existing models.
 
 
