@@ -22,6 +22,11 @@ static inline void sync_mps() {
 static id<MTLDevice> g_device = nil;
 static id<MTLLibrary> g_library = nil;
 static std::unordered_map<std::string, id<MTLComputePipelineState>> g_pipelines;
+static NSString* g_sourcePath = nil;
+
+void set_metal_source_path(std::string path) {
+    g_sourcePath = [NSString stringWithUTF8String:path.c_str()];
+}
 
 // Initialize Metal device and load library
 static void init_metal() {
@@ -38,6 +43,10 @@ static void init_metal() {
         [bundlePath stringByAppendingPathComponent:@"haar_kernels.metallib"],
         [[NSFileManager defaultManager] currentDirectoryPath]
     ];
+    
+    if (g_sourcePath != nil) {
+        searchPaths = @[[g_sourcePath stringByAppendingPathComponent:@"haar_kernels.metallib"]];
+    }
     
     for (NSString* basePath in searchPaths) {
         NSString* fullPath = basePath;
@@ -66,8 +75,14 @@ static void init_metal() {
         
         NSMutableString* allSource = [NSMutableString string];
         for (NSString* file in metalFiles) {
-            NSString* path = [[currentDir stringByAppendingPathComponent:@"metal_haar"] 
-                              stringByAppendingPathComponent:file];
+            NSString* path;
+            if (g_sourcePath != nil) {
+                path = [g_sourcePath stringByAppendingPathComponent:file];
+            } else {
+                NSString* currentDir = [[NSFileManager defaultManager] currentDirectoryPath];
+                path = [[currentDir stringByAppendingPathComponent:@"metal_haar"] 
+                                  stringByAppendingPathComponent:file];
+            }
             NSString* source = [NSString stringWithContentsOfFile:path 
                                                          encoding:NSUTF8StringEncoding 
                                                             error:&error];
@@ -735,6 +750,9 @@ void haar2d_quint_backward_metal(torch::Tensor grad_level1, torch::Tensor grad_l
 // =============================================================================
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
+    // Configuration
+    m.def("set_metal_source_path", &set_metal_source_path, "Set path to Metal source files");
+
     // Single level
     m.def("haar2d_forward", &haar2d_forward_metal, "Haar 2D forward (Metal)");
     m.def("haar2d_backward", &haar2d_backward_metal, "Haar 2D backward (Metal)");

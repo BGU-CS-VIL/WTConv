@@ -47,6 +47,7 @@ def _get_module():
             extra_ldflags=['-framework', 'Metal', '-framework', 'Foundation'],
             verbose=False
         )
+        _module.set_metal_source_path(str(src_dir))
         print("Done.")
     return _module
 
