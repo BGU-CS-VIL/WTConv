@@ -73,6 +73,7 @@ class WTConvNeXtBlock(nn.Module):
             norm_layer: Optional[Callable] = None,
             drop_path: float = 0.,
             wt_levels: int = 0,
+            wtconv_class: Optional[type] = None,
     ):
         """
 
@@ -100,7 +101,10 @@ class WTConvNeXtBlock(nn.Module):
             norm_layer = LayerNorm2d if conv_mlp else LayerNorm
         mlp_layer = partial(GlobalResponseNormMlp if use_grn else Mlp, use_conv=conv_mlp)
         self.use_conv_mlp = conv_mlp
-        self.conv_dw = WTConv2d(
+        
+        # Use provided wtconv_class or default WTConv2d
+        conv_class = wtconv_class if wtconv_class is not None else WTConv2d
+        self.conv_dw = conv_class(
             in_chs,
             out_chs,
             kernel_size=kernel_size,
@@ -155,6 +159,7 @@ class WTConvNeXtStage(nn.Module):
             norm_layer=None,
             norm_layer_cl=None,
             wt_levels=0,
+            wtconv_class=None,
     ):
         super().__init__()
         self.grad_checkpointing = False
@@ -194,6 +199,7 @@ class WTConvNeXtStage(nn.Module):
                 act_layer=act_layer,
                 norm_layer=norm_layer if conv_mlp else norm_layer_cl,
                 wt_levels=wt_levels,
+                wtconv_class=wtconv_class,
             ))
             in_chs = out_chs
         self.blocks = nn.Sequential(*stage_blocks)
@@ -236,6 +242,7 @@ class WTConvNeXt(nn.Module):
             drop_rate: float = 0.,
             drop_path_rate: float = 0.,
             wt_levels: Tuple[int, ...] = (5, 4, 3, 2),
+            wtconv_class: Optional[type] = None,
     ):
         """
         Args:
@@ -329,6 +336,7 @@ class WTConvNeXt(nn.Module):
                 norm_layer=norm_layer,
                 norm_layer_cl=norm_layer_cl,
                 wt_levels=wt_levels[i],
+                wtconv_class=wtconv_class,
             ))
             prev_chs = out_chs
             # NOTE feature_info use currently assumes stage 0 == stride 1, rest are stride 2
@@ -363,7 +371,7 @@ class WTConvNeXt(nn.Module):
 
     @torch.jit.ignore
     def no_weight_decay(self):
-        {k for k,_ in self.named_parameters() if 'wavelet_scale' in k or 'base_scale' in k}
+        return {k for k,_ in self.named_parameters() if 'wavelet_scale' in k or 'base_scale' in k}
 
     @torch.jit.ignore
     def group_matcher(self, coarse=False):
@@ -548,6 +556,12 @@ def _cfg(url='', **kwargs):
         **kwargs
     }
 
+
+default_cfgs = generate_default_cfgs({
+    'wtconvnext_tiny': _cfg(),
+    'wtconvnext_small': _cfg(),
+    'wtconvnext_base': _cfg(),
+})
 
 
 @register_model
