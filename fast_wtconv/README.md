@@ -15,6 +15,16 @@ A high-performance implementation of Wavelet Convolution (WTConv) layers with op
 - **Seamless Integration**: Matches the API of the original `WTConv2d` for easy integration into existing models.
 
 
+## Performance
+
+Speedup compared to the original WTConv implementation (Kernel Size: 5, FP32):
+
+| Platform | Hardware | Speedup |
+|----------|----------|---------|
+| **CUDA**  | RTX A6000 | ~2.9x |
+| **Triton** | RTX A6000 | ~3.0x |
+| **Metal** | Apple M3 | ~2.3x |
+
 ## Installation
 
 Ensure you have the necessary dependencies installed:
