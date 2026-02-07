@@ -20,7 +20,7 @@ class="center">
 </details>
 
 ## Updates
-* February 6, 2026 - Added `fast_wtconv`, a high-performance implementation with CUDA, Metal, and Triton backends.
+* February 7, 2026 - Added `fast_wtconv`, a high-performance implementation with CUDA, Metal, and Triton backends. [More details here](fast_wtconv/README.md).
 * June 11, 2025 - Added WTConv1d, as implemented for [TimePoint](https://github.com/BGU-CS-VIL/TimePoint).
 
 ## Requirements
@@ -179,11 +179,23 @@ This project is released under the MIT license. Please see the [LICENSE](LICENSE
 
 ## Citation
 If you find this repository helpful, please consider citing:
-```
+```bibtex
 @inproceedings{finder2024wavelet,
   title     = {Wavelet Convolutions for Large Receptive Fields},
   author    = {Finder, Shahaf E and Amoyal, Roy and Treister, Eran and Freifeld, Oren},
   booktitle = {European Conference on Computer Vision},
   year      = {2024},
+}
+```
+If you use the optimized implementation (CUDA/MPS/Triton) in your work, please also acknowledge:
+```bibtex
+@misc{aflalo2026fastwtconv,
+  author = {Aflalo, Amit and Amoyal, Roy and Finder, Shahaf E and Treister, Eran and Freifeld, Oren},
+  title = {Fast Implementation for WTConv},
+  year = {2026},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/BGU-CS-VIL/WTConv}},
+  note = {Commit hash: bb50df4}
 }
 ```
