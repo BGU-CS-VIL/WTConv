@@ -20,6 +20,7 @@ class="center">
 </details>
 
 ## Updates
+* February 6, 2026 - Added `fast_wtconv`, a high-performance implementation with CUDA, Metal, and Triton backends.
 * June 11, 2025 - Added WTConv1d, as implemented for [TimePoint](https://github.com/BGU-CS-VIL/TimePoint).
 
 ## Requirements
@@ -45,6 +46,9 @@ model = create_model(
 )
 ```
 
+## Fast WTConv
+We provide a high-performance implementation of WTConv layers efficiently optimized for CUDA, Metal (MPS), and Triton.
+Please refer to [fast_wtconv](fast_wtconv/README.md) for more details.
 
 ## Results and Trained Models
 ### ImageNet-1K
