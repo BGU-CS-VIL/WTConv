@@ -371,7 +371,10 @@ class WTConvNeXt(nn.Module):
 
     @torch.jit.ignore
     def no_weight_decay(self):
-        return {k for k,_ in self.named_parameters() if 'wavelet_scale' in k or 'base_scale' in k}
+        # 'wavelet_scale' covers wtconv/ and the Metal backend, 'wt_scales' the
+        # CUDA and Triton backends
+        return {k for k,_ in self.named_parameters()
+                if 'wavelet_scale' in k or 'wt_scales' in k or 'base_scale' in k}
 
     @torch.jit.ignore
     def group_matcher(self, coarse=False):

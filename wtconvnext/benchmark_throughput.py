@@ -69,7 +69,7 @@ def _get_wtconv_cuda():
     if _WTConv2dCUDA is None:
         # Suppress compilation output
         with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
-            from fast_wtconv.wtconv import WTConv2d
+            from fast_wtconv.wtconv_cuda import WTConv2d
             _WTConv2dCUDA = WTConv2d
     return _WTConv2dCUDA
 

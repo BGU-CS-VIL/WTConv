@@ -1,56 +1,67 @@
 """
-CUDA Haar Wavelet Transform Library
+Fused CUDA Haar kernels for WTConv.
 
-Unified library for 2D Haar wavelet transforms with multiple cascade levels.
+The Haar transform is fused into the depthwise convolution weights, so wavelet
+coefficients never touch memory.
 """
 
 from .haar_cuda import (
-    # Functional API
-    haar2d,
+    # Largest kernel size this build is compiled for (see HAAR_MAX_K), the hard
+    # ceiling of the kernels themselves, and the check that reports the difference
+    MAX_KERNEL_SIZE,
+    HARD_MAX_KERNEL_SIZE,
+    check_kernel_size,
+    # Whole wavelet branch (fused Haar+conv+scale per level, fused inverse+add)
+    wavelet_branch,
+    # Fused Haar -> conv -> scale
+    fused_haar_conv_scale,
+    compute_scaled_weight,
+    # Inverse cascade with the final add fused in
+    ihaar2d_fused,
+    ihaar2d_double_fused,
+    ihaar2d_triple_fused,
+    ihaar2d_quad_fused,
+    ihaar2d_quint_fused,
+    # Plain inverse cascade
     ihaar2d,
-    haar2d_double,
-    haar2d_triple,
-    haar2d_quad,
-    haar2d_quint,
     ihaar2d_double,
     ihaar2d_triple,
     ihaar2d_quad,
     ihaar2d_quint,
-    # Wrapper classes
-    HaarCUDA,
-    HaarDoubleCUDA,
-    HaarTripleCUDA,
-    HaarQuadCUDA,
-    HaarQuintCUDA,
-    # Autograd functions (for advanced use)
-    HaarTransform,
-    InverseHaarTransform,
-    HaarDoubleTransform,
-    HaarTripleTransform,
-    HaarQuadTransform,
-    HaarQuintTransform,
+    # Forward Haar (utility)
+    haar2d,
+    # Base-conv path
+    scaled_depthwise_conv,
+    # Autograd functions / raw runners (advanced use)
+    FusedHaarConvScaleFunction,
+    WaveletBranchFunction,
+    IHaarCascadeFn,
+    run_ihaar_cascade,
+    run_haar_cascade,
 )
 
 __all__ = [
-    'haar2d',
+    'MAX_KERNEL_SIZE',
+    'HARD_MAX_KERNEL_SIZE',
+    'check_kernel_size',
+    'wavelet_branch',
+    'fused_haar_conv_scale',
+    'compute_scaled_weight',
+    'ihaar2d_fused',
+    'ihaar2d_double_fused',
+    'ihaar2d_triple_fused',
+    'ihaar2d_quad_fused',
+    'ihaar2d_quint_fused',
     'ihaar2d',
-    'haar2d_double',
-    'haar2d_triple',
-    'haar2d_quad',
-    'haar2d_quint',
     'ihaar2d_double',
     'ihaar2d_triple',
     'ihaar2d_quad',
     'ihaar2d_quint',
-    'HaarCUDA',
-    'HaarDoubleCUDA',
-    'HaarTripleCUDA',
-    'HaarQuadCUDA',
-    'HaarQuintCUDA',
-    'HaarTransform',
-    'InverseHaarTransform',
-    'HaarDoubleTransform',
-    'HaarTripleTransform',
-    'HaarQuadTransform',
-    'HaarQuintTransform',
+    'haar2d',
+    'scaled_depthwise_conv',
+    'FusedHaarConvScaleFunction',
+    'WaveletBranchFunction',
+    'IHaarCascadeFn',
+    'run_ihaar_cascade',
+    'run_haar_cascade',
 ]
