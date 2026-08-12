@@ -189,11 +189,11 @@ If you find this repository helpful, please consider citing:
 ```
 If you use the optimized implementation (CUDA/MPS/Triton) in your work, please also acknowledge:
 ```bibtex
-@misc{aflalo2026fast,
+@article{aflalo2026fast,
       title={Fast and Memory-Efficient Wavelet Convolutions via I/O-Aware Reformulation}, 
       author={Amit Aflalo and Shahaf E. Finder and Roy Amoyal and Eran Treister and Oren Freifeld},
       year={2026},
-      eprint={2608.10805},
+      journal={arXiv preprint arXiv:2608.10805},
       url={https://arxiv.org/abs/2608.10805}, 
 }
 ```
