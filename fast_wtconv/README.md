@@ -6,6 +6,10 @@ A high-performance implementation of Wavelet Convolution (WTConv) layers with op
 
 `fast_wtconv` provides a drop-in replacement for WTConv layers that significantly accelerates training and inference.
 
+The CUDA code is the official implementation accompanying the paper [*Fast and Memory-Efficient
+Wavelet Convolutions via I/O-Aware Reformulation*](https://arxiv.org/abs/2608.10805) and implements
+its fused, I/O-aware reformulation of WTConv.
+
 ## Features
 
 - **Multi-Backend Support**:
@@ -107,12 +111,6 @@ output = layer(x)
   spatial sizes are zero-padded at each decomposition level and cropped back on reconstruction.
 
 > [!NOTE]
-> The CUDA backend was replaced with a fused, I/O-aware implementation: the Haar transform is fused
-> into the depthwise convolution, the inverse cascade is a single pass, and the learned scales are
-> folded into the weights, so wavelet coefficients never reach memory. At the same time, the former
+> The CUDA backend was replaced with a fused, I/O-aware implementation. At the same time, the former
 > auto-detecting `wtconv.py` was split into `wtconv_cuda.py` and `wtconv_metal.py`, one per backend.
 > The previous CUDA backend and the combined entry point are at commit `1e9a25c`.
->
-> Note that the CUDA and Triton backends name their parameters `base_weight`, `wt_weights` and
-> `wt_scales`, while the Metal backend keeps `base_conv.weight`, `wavelet_convs` and
-> `wavelet_scales`, so checkpoints are not interchangeable between the two groups.

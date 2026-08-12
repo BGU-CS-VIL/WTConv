@@ -189,13 +189,11 @@ If you find this repository helpful, please consider citing:
 ```
 If you use the optimized implementation (CUDA/MPS/Triton) in your work, please also acknowledge:
 ```bibtex
-@misc{aflalo2026fastwtconv,
-  author = {Aflalo, Amit and Amoyal, Roy and Finder, Shahaf E and Treister, Eran and Freifeld, Oren},
-  title = {Fast Implementation for WTConv},
-  year = {2026},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/BGU-CS-VIL/WTConv}},
-  note = {Commit hash: bb50df4}
+@misc{aflalo2026fast,
+      title={Fast and Memory-Efficient Wavelet Convolutions via I/O-Aware Reformulation}, 
+      author={Amit Aflalo and Shahaf E. Finder and Roy Amoyal and Eran Treister and Oren Freifeld},
+      year={2026},
+      eprint={2608.10805},
+      url={https://arxiv.org/abs/2608.10805}, 
 }
 ```
