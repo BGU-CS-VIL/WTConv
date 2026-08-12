@@ -1,53 +1,39 @@
 #include <torch/extension.h>
+#include <vector>
 
-// Single level forward/backward (haar_single.cu)
-void haar2d_forward(torch::Tensor input, torch::Tensor output);
-void haar2d_backward(torch::Tensor grad_output, torch::Tensor grad_input);
+// Fused Haar -> depthwise conv -> scale (fused_haar_conv.cu)
+void fused_haar_conv_forward(torch::Tensor input, torch::Tensor fused_weight,
+                             torch::Tensor output, c10::optional<torch::Tensor> ll_output);
+void fused_haar_conv_backward(torch::Tensor grad_output, torch::Tensor fused_weight,
+                              torch::Tensor grad_input, c10::optional<torch::Tensor> grad_ll);
+void fused_haar_grad_weight(torch::Tensor input, torch::Tensor grad_output,
+                            torch::Tensor grad_fused_weight);
+void haar_coeffs(torch::Tensor input, torch::Tensor output);
 
-// Single level inverse (haar_inverse.cu)
-void haar2d_inverse(torch::Tensor input, torch::Tensor output);
-void haar2d_inverse_backward(torch::Tensor grad_output, torch::Tensor grad_input);
+// Depthwise conv weight gradient for the base-conv path (depthwise_grad.cu)
+void depthwise_grad_weight(torch::Tensor input, torch::Tensor grad_output,
+                           torch::Tensor grad_weight);
 
-// Fused forward cascade (haar_forward_cascade.cu)
-void haar2d_double_cascade(torch::Tensor input, torch::Tensor level1, torch::Tensor level2);
-void haar2d_triple_cascade(torch::Tensor input, torch::Tensor level1, torch::Tensor level2, torch::Tensor level3);
-void haar2d_quad_cascade(torch::Tensor input, torch::Tensor level1, torch::Tensor level2, torch::Tensor level3, torch::Tensor level4);
-void haar2d_quint_cascade(torch::Tensor input, torch::Tensor level1, torch::Tensor level2, torch::Tensor level3, torch::Tensor level4, torch::Tensor level5);
-
-// Fused forward cascade backward (haar_forward_cascade.cu)
-void haar2d_double_cascade_backward(torch::Tensor grad_level1, torch::Tensor grad_level2, torch::Tensor grad_input);
-void haar2d_triple_cascade_backward(torch::Tensor grad_level1, torch::Tensor grad_level2, torch::Tensor grad_level3, torch::Tensor grad_input);
-void haar2d_quad_cascade_backward(torch::Tensor grad_level1, torch::Tensor grad_level2, torch::Tensor grad_level3, torch::Tensor grad_level4, torch::Tensor grad_input);
-void haar2d_quint_cascade_backward(torch::Tensor grad_level1, torch::Tensor grad_level2, torch::Tensor grad_level3, torch::Tensor grad_level4, torch::Tensor grad_level5, torch::Tensor grad_input);
-
-// Fused inverse cascade (haar_inverse_cascade.cu)
-void ihaar2d_double_cascade(torch::Tensor level1, torch::Tensor level2, torch::Tensor output);
-void ihaar2d_triple_cascade(torch::Tensor level1, torch::Tensor level2, torch::Tensor level3, torch::Tensor output);
-void ihaar2d_quad_cascade(torch::Tensor level1, torch::Tensor level2, torch::Tensor level3, torch::Tensor level4, torch::Tensor output);
-void ihaar2d_quint_cascade(torch::Tensor level1, torch::Tensor level2, torch::Tensor level3, torch::Tensor level4, torch::Tensor level5, torch::Tensor output);
+// Fused inverse Haar cascade with optional fused add (ihaar_cascade.cu)
+void ihaar_cascade(std::vector<torch::Tensor> levels, torch::Tensor output,
+                   c10::optional<torch::Tensor> add);
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
-    // Single level
-    m.def("haar2d_forward", &haar2d_forward, "Haar 2D forward (CUDA)");
-    m.def("haar2d_backward", &haar2d_backward, "Haar 2D backward (CUDA)");
-    m.def("haar2d_inverse", &haar2d_inverse, "Haar 2D inverse (CUDA)");
-    m.def("haar2d_inverse_backward", &haar2d_inverse_backward, "Haar 2D inverse backward (CUDA)");
-    
-    // Fused forward cascade
-    m.def("haar2d_double_cascade", &haar2d_double_cascade, "2-level fused forward Haar (CUDA)");
-    m.def("haar2d_triple_cascade", &haar2d_triple_cascade, "3-level fused forward Haar (CUDA)");
-    m.def("haar2d_quad_cascade", &haar2d_quad_cascade, "4-level fused forward Haar (CUDA)");
-    m.def("haar2d_quint_cascade", &haar2d_quint_cascade, "5-level fused forward Haar (CUDA)");
-    
-    // Fused forward cascade backward
-    m.def("haar2d_double_cascade_backward", &haar2d_double_cascade_backward, "2-level fused forward Haar backward (CUDA)");
-    m.def("haar2d_triple_cascade_backward", &haar2d_triple_cascade_backward, "3-level fused forward Haar backward (CUDA)");
-    m.def("haar2d_quad_cascade_backward", &haar2d_quad_cascade_backward, "4-level fused forward Haar backward (CUDA)");
-    m.def("haar2d_quint_cascade_backward", &haar2d_quint_cascade_backward, "5-level fused forward Haar backward (CUDA)");
-    
-    // Fused inverse cascade
-    m.def("ihaar2d_double_cascade", &ihaar2d_double_cascade, "2-level fused inverse Haar (CUDA)");
-    m.def("ihaar2d_triple_cascade", &ihaar2d_triple_cascade, "3-level fused inverse Haar (CUDA)");
-    m.def("ihaar2d_quad_cascade", &ihaar2d_quad_cascade, "4-level fused inverse Haar (CUDA)");
-    m.def("ihaar2d_quint_cascade", &ihaar2d_quint_cascade, "5-level fused inverse Haar (CUDA)");
+    m.def("fused_haar_conv_forward", &fused_haar_conv_forward,
+          "Fused Haar + depthwise conv + scale, forward (CUDA)",
+          py::arg("input"), py::arg("fused_weight"), py::arg("output"),
+          py::arg("ll_output") = py::none());
+    m.def("fused_haar_conv_backward", &fused_haar_conv_backward,
+          "Fused Haar + depthwise conv + scale, grad w.r.t. input (CUDA)",
+          py::arg("grad_output"), py::arg("fused_weight"), py::arg("grad_input"),
+          py::arg("grad_ll") = py::none());
+    m.def("fused_haar_grad_weight", &fused_haar_grad_weight,
+          "Weight gradient straight from the level input, no coefficients (CUDA)");
+    m.def("haar_coeffs", &haar_coeffs,
+          "Single-level Haar coefficients, (B,C,H,W) -> (B,C,4,H2,W2) (CUDA)");
+    m.def("depthwise_grad_weight", &depthwise_grad_weight,
+          "Depthwise conv weight gradient, stride 1, 'same' padding (CUDA)");
+    m.def("ihaar_cascade", &ihaar_cascade,
+          "Fused 1-5 level inverse Haar cascade with optional fused add (CUDA)",
+          py::arg("levels"), py::arg("output"), py::arg("add") = py::none());
 }
